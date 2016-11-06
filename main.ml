@@ -122,11 +122,65 @@ let state_based_twopset () : unit =
 
   ()
 
+let state_based_lwwset () : unit =
+  let module LwwSet = LwwSet.StateBased in
+  let module TwoPGraphed = struct
+    include Crdt.StateBasedGraphed(LwwSet)
+
+    let add (xs: t) (x: int) : t =
+      update xs (LwwSet.Add x)
+
+    let remove (xs: t) (x: int) : t =
+      update xs (LwwSet.Remove x)
+  end in
+  let open TwoPGraphed in
+
+  let a = wrap LwwSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = add a 1 in
+  let c = remove a 2 in
+  let d = merge b c in
+  write_to_file ~filename:"LwwSet1.dot" ~data:(to_dot d);
+
+  let a = wrap LwwSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = add a 1 in
+  let b' = remove b 2 in
+  let c = add a 2 in
+  let c' = remove c 1 in
+  write_to_file ~filename:"LwwSet2.dot" ~data:(to_dot (merge b' c'));
+
+  let a = wrap LwwSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = remove a 4 in
+  let c = add a 1 in
+  let d = add c 2 in
+  let e = add d 4 in
+  let f = remove c 2 in
+  let g = merge e f in
+  let h = merge b g in
+  write_to_file ~filename:"LwwSet3.dot" ~data:(to_dot h);
+
+  let a = wrap LwwSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b1 = add a 1 in
+  let b2 = remove b1 1 in
+  let b3 = add b2 1 in
+  write_to_file ~filename:"LwwSet4.dot" ~data:(to_dot b3);
+
+  let a = wrap LwwSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = add a 1 in
+  let c = remove a 1 in
+  let d = merge b c in
+  let e1 = add d 1 in
+  let e2 = add e1 1 in
+  let f = remove d 1 in
+  write_to_file ~filename:"LwwSet5.dot" ~data:(to_dot (merge e2 f));
+
+  ()
+
 let main () : unit =
   state_based_gcounter ();
   state_based_pncounter ();
   state_based_gset ();
   state_based_twopset ();
+  state_based_lwwset ();
   ()
 
 let () = main ()
