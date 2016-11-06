@@ -12,7 +12,7 @@ explaining CRDTs. This repository contains code to visualize them.
 - Registers
     - TODO
 - Sets
-    - TODO
+    - [State Based G-Set](#state-based-g-set)
 
 ## State Based G-Counter
 ![GCounter1](graphs/GCounter1.png)
@@ -21,6 +21,10 @@ explaining CRDTs. This repository contains code to visualize them.
 ## State Based PN-Counter
 ![PnCounter1](graphs/PnCounter1.png)
 ![PnCounter2](graphs/PnCounter2.png)
+
+## State Based G-Set
+![GSet1](graphs/GSet1.png)
+![GSet2](graphs/GSet2.png)
 
 ## Building and Running
 ```bash

@@ -12,6 +12,7 @@ let state_based_gcounter () : unit =
       update x (GCounter.Increment (node, k))
   end in
   let open GCounterGraphed in
+
   let a = wrap (0, 0, 0) in
   let b = increment a GCounter.One 1 in
   let c = increment a GCounter.Two 3 in
@@ -40,6 +41,7 @@ let state_based_pncounter () : unit =
       update x (PnCounter.Decrement (node, k))
   end in
   let open PnCounterGraphed in
+
   let a = wrap PnCounter.{p=(0, 0, 0); n=(0, 0, 0)} in
   let b = increment a GCounter.One 1 in
   let c = decrement a GCounter.Two 3 in
@@ -55,9 +57,37 @@ let state_based_pncounter () : unit =
   write_to_file ~filename:"PnCounter2.dot" ~data:(to_dot g);
   ()
 
+let state_based_gset () : unit =
+  let module GSet = GSet.StateBased in
+  let module GSetGraphed = struct
+    include Crdt.StateBasedGraphed(GSet)
+
+    let add (xs: t) (x: int) : t =
+      update xs (GSet.Add x)
+  end in
+  let open GSetGraphed in
+
+  let a = wrap Int.Set.empty in
+  let b = add a 1 in
+  let c = add a 2 in
+  let d = merge b c in
+  write_to_file ~filename:"GSet1.dot" ~data:(to_dot d);
+
+  let a = wrap Int.Set.empty in
+  let b = add a 4 in
+  let c = add a 1 in
+  let d = add c 2 in
+  let e = add d 3 in
+  let f = add c 2 in
+  let g = merge e f in
+  let h = merge b g in
+  write_to_file ~filename:"GSet2.dot" ~data:(to_dot h);
+  ()
+
 let main () : unit =
   state_based_gcounter ();
   state_based_pncounter ();
+  state_based_gset ();
   ()
 
 let () = main ()
