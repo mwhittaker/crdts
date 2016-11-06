@@ -124,7 +124,7 @@ let state_based_twopset () : unit =
 
 let state_based_lwwset () : unit =
   let module LwwSet = LwwSet.StateBased in
-  let module TwoPGraphed = struct
+  let module LwwSetGraphed = struct
     include Crdt.StateBasedGraphed(LwwSet)
 
     let add (xs: t) (x: int) : t =
@@ -133,7 +133,7 @@ let state_based_lwwset () : unit =
     let remove (xs: t) (x: int) : t =
       update xs (LwwSet.Remove x)
   end in
-  let open TwoPGraphed in
+  let open LwwSetGraphed in
 
   let a = wrap LwwSet.{a=Int.Map.empty; r=Int.Map.empty} in
   let b = add a 1 in
@@ -175,12 +175,44 @@ let state_based_lwwset () : unit =
 
   ()
 
+let state_based_pnset () : unit =
+  let module GCounter = GCounter.StateBased in
+  let module PnSet = PnSet.StateBased in
+  let module PnSetGraphed = struct
+    include Crdt.StateBasedGraphed(PnSet)
+
+    let add (xs: t) (node: GCounter.node) (x: int) : t =
+      update xs (PnSet.Add (node, x))
+
+    let remove (xs: t) (node: GCounter.node) (x: int) : t =
+      update xs (PnSet.Remove (node, x))
+  end in
+  let open PnSetGraphed in
+
+  let a = wrap Int.Map.empty in
+  let b = add a GCounter.One 1 in
+  let c = remove a GCounter.Two 1 in
+  let d = add a GCounter.Three 1 in
+  write_to_file ~filename:"PnSet1.dot" ~data:(to_dot (merge d (merge b c)));
+
+  let a = wrap Int.Map.empty in
+  let b1 = add a GCounter.One 1 in
+  let b2 = add b1 GCounter.One 2 in
+  let c1 = remove a GCounter.Two 1 in
+  let c2 = remove c1 GCounter.Two 3 in
+  let d1 = add a GCounter.Three 1 in
+  let d2 = add d1 GCounter.Three 1 in
+  write_to_file ~filename:"PnSet2.dot" ~data:(to_dot (merge d2 (merge b2 c2)));
+
+  ()
+
 let main () : unit =
   state_based_gcounter ();
   state_based_pncounter ();
   state_based_gset ();
   state_based_twopset ();
   state_based_lwwset ();
+  state_based_pnset ();
   ()
 
 let () = main ()

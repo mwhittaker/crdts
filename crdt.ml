@@ -49,7 +49,7 @@ module StateBasedGraphed(C: StateBased) = struct
       [`Rankdir `LeftToRight]
 
     let default_vertex_attributes _ =
-      [`Shape `Record]
+      [`Shape `Record; `Fontname "Courier"]
 
     let vertex_name v =
       Int.to_string (V.hash v)
@@ -58,7 +58,7 @@ module StateBasedGraphed(C: StateBased) = struct
       None
 
     let default_edge_attributes _ =
-      []
+      [`Fontname "Courier"]
 
     let vertex_attributes v =
       let x = V.label v in
