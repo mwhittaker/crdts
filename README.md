@@ -16,6 +16,7 @@ explaining CRDTs. This repository contains code to visualize them.
     - [State Based 2P-Set](#state-based-2p-set)
     - [State Based LWW-Set](#state-based-lww-set)
     - [State Based PN-Set](#state-based-pn-set)
+    - [State Based MWS-Set](#state-based-mws-set)
 
 ## State Based G-Counter
 ![GCounter1](graphs/GCounter1.png)
@@ -44,6 +45,11 @@ explaining CRDTs. This repository contains code to visualize them.
 ## State Based PN-Set
 ![PnSet1](graphs/PnSet1.png)
 ![PnSet2](graphs/PnSet2.png)
+
+## State Based MWS-Set
+![MwsSet1](graphs/MwsSet1.png)
+![MwsSet2](graphs/MwsSet2.png)
+![MwsSet3](graphs/MwsSet3.png)
 
 ## Building and Running
 ```bash
