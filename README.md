@@ -14,11 +14,11 @@ explaining CRDTs. This repository contains code to visualize them.
 - Sets
     - TODO
 
-## State Based G-Counters
+## State Based G-Counter
 ![GCounter1](graphs/GCounter1.png)
 ![GCounter2](graphs/GCounter2.png)
 
-## State Based PN-Counters
+## State Based PN-Counter
 ![PnCounter1](graphs/PnCounter1.png)
 ![PnCounter2](graphs/PnCounter2.png)
 
