@@ -19,8 +19,8 @@ explaining CRDTs. This repository contains code to visualize them.
 ![GCounter2](graphs/GCounter2.png)
 
 ## State Based PN-Counters
-![PNCounter1](graphs/PNCounter1.png)
-![PNCounter2](graphs/PNCounter2.png)
+![PnCounter1](graphs/PnCounter1.png)
+![PnCounter2](graphs/PnCounter2.png)
 
 ## Building and Running
 ```bash
