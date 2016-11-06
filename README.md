@@ -7,8 +7,8 @@ explaining CRDTs. This repository contains code to visualize them.
 
 ## Table of Contents
 - Counters
-    - [State Based G-Counter](state-based-g-counter)
-    - [State Based PN-Counter](state-based-pn-counter)
+    - [State Based G-Counter](#state-based-g-counter)
+    - [State Based PN-Counter](#state-based-pn-counter)
 - Registers
     - TODO
 - Sets
