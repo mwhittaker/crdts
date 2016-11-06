@@ -9,8 +9,11 @@ open Core.Std
  *   - S is a join semillatice,
  *   - s^0 in S is the initial state,
  *   - q: S -> query is a query method,
- *   - u: S -> update -> S is a monotonic update method, and
+ *   - u: S -> update -> S is a monotonic* update method, and
  *   - m: S -> S -> S is the join operator defined for S.
+ *
+ * * Here, monotonic means that for all states `x` and all updates `u`, `x <=
+ * update x u`.
  *
  * [1]: https://scholar.google.com/scholar?cluster=4496511741683930603
  * [2]: https://scholar.google.com/scholar?cluster=13367952773539942258 *)
