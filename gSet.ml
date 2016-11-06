@@ -17,7 +17,7 @@ module StateBased = struct
   let string_of_t xs =
     let ints = Int.Set.elements xs in
     let strings = List.map ~f:Int.to_string ints in
-    Printf.sprintf "{%s}" (String.concat ~sep:", " strings)
+    Printf.sprintf "\\{%s\\}" (String.concat ~sep:", " strings)
 
   let string_of_update (Add x) =
     Printf.sprintf "+%d" x
