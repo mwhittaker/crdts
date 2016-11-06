@@ -84,10 +84,49 @@ let state_based_gset () : unit =
   write_to_file ~filename:"GSet2.dot" ~data:(to_dot h);
   ()
 
+let state_based_twopset () : unit =
+  let module TwoPSet = TwoPSet.StateBased in
+  let module TwoPGraphed = struct
+    include Crdt.StateBasedGraphed(TwoPSet)
+
+    let add (xs: t) (x: int) : t =
+      update xs (TwoPSet.Add x)
+
+    let remove (xs: t) (x: int) : t =
+      update xs (TwoPSet.Remove x)
+  end in
+  let open TwoPGraphed in
+
+  let a = wrap TwoPSet.{a=Int.Set.empty; r=Int.Set.empty} in
+  let b = add a 1 in
+  let c = remove a 2 in
+  let d = merge b c in
+  write_to_file ~filename:"TwoPSet1.dot" ~data:(to_dot d);
+
+  let a = wrap TwoPSet.{a=Int.Set.empty; r=Int.Set.empty} in
+  let b = add a 1 in
+  let b' = remove b 2 in
+  let c = add a 2 in
+  let c' = remove c 1 in
+  write_to_file ~filename:"TwoPSet2.dot" ~data:(to_dot (merge b' c'));
+
+  let a = wrap TwoPSet.{a=Int.Set.empty; r=Int.Set.empty} in
+  let b = remove a 4 in
+  let c = add a 1 in
+  let d = add c 2 in
+  let e = add d 4 in
+  let f = remove c 2 in
+  let g = merge e f in
+  let h = merge b g in
+  write_to_file ~filename:"TwoPSet3.dot" ~data:(to_dot h);
+
+  ()
+
 let main () : unit =
   state_based_gcounter ();
   state_based_pncounter ();
   state_based_gset ();
+  state_based_twopset ();
   ()
 
 let () = main ()
