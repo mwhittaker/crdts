@@ -247,6 +247,49 @@ let state_based_mwsset () : unit =
 
   ()
 
+let state_based_orset () : unit =
+  let module OrSet = OrSet.StateBased in
+  let module OrSetGraphed = struct
+    include Crdt.StateBasedGraphed(OrSet)
+
+    let add (xs: t) (x: int) : t =
+      update xs (OrSet.Add (OrSet.nats, x))
+
+    let remove (xs: t) (x: int) : t =
+      update xs (OrSet.Remove x)
+  end in
+  let open OrSetGraphed in
+
+  let a = wrap OrSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = add a 1 in
+  let c = add a 2 in
+  write_to_file ~filename:"OrSet1.dot" ~data:(to_dot (merge b c));
+
+  let a = wrap OrSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = add a 1 in
+  let c = add a 1 in
+  write_to_file ~filename:"OrSet2.dot" ~data:(to_dot (merge b c));
+
+  let a = wrap OrSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = add a 1 in
+  let c = remove a 1 in
+  write_to_file ~filename:"OrSet3.dot" ~data:(to_dot (merge b c));
+
+  let a = wrap OrSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let a = add a 1 in
+  let a = remove a 1 in
+  let a = add a 1 in
+  let a = remove a 1 in
+  write_to_file ~filename:"OrSet4.dot" ~data:(to_dot a);
+
+  let a = wrap OrSet.{a=Int.Map.empty; r=Int.Map.empty} in
+  let b = add a 1 in
+  let c1 = add a 1 in
+  let c2 = remove c1 1 in
+  write_to_file ~filename:"OrSet5.dot" ~data:(to_dot (merge b c2));
+
+  ()
+
 let main () : unit =
   state_based_gcounter ();
   state_based_pncounter ();
@@ -255,6 +298,7 @@ let main () : unit =
   state_based_lwwset ();
   state_based_pnset ();
   state_based_mwsset ();
+  state_based_orset ();
   ()
 
 let () = main ()
